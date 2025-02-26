@@ -1,0 +1,19 @@
+spring:
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE}
+  timezone: UTC+08:00
+  application:
+    name: mars-tnc
+  config:
+    import: "optional:configserver:"
+  cloud:
+    config:
+      uri: ${CONFIG_SERVER_URL}
+#      username: configUMars
+#      password: configMarsP@ss$8172
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: refresh
