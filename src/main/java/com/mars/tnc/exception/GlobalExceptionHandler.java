@@ -77,6 +77,6 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(Exception.class)
     public ResponseEntity<Object> handleUnexpectedException(Exception e) {
         return new ResponseEntity<>(
-                new ApiDTO(false, "An unexpected exception occurred"), HttpStatus.INTERNAL_SERVER_ERROR);
+                new ApiDTO(false, "An unexpected exception occurred " + e.getMessage()), HttpStatus.INTERNAL_SERVER_ERROR);
     }
 }

@@ -18,16 +18,32 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.enums;
 
-public final class ApiConstants {
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+import java.util.Arrays;
+import java.util.Optional;
 
+@RequiredArgsConstructor
+@Getter
+public enum EDeviceFile {
 
+    VERCHECK("vercheck.sh"),
+    K3_AIOT("k3_aiot.sh"),
+    SEED_AIOT("seed_aiot.sh"),
+    K3APP("k3app"),
+    CONFIG("config.json"),
+    STAGING("staging_config.json"),
+    INITIATION("initiation_config.json"),
+    PRODUCTION("production_config.json");
+
+    private final String key;
+
+    public static Optional<EDeviceFile> getDeviceFile(String key) {
+        return Arrays.stream(EDeviceFile.values())
+                .filter(df -> df.key.equals(key))
+                .findFirst();
+    }
 }

@@ -18,16 +18,40 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.model;
 
-public final class ApiConstants {
+import com.mars.tnc.model.base.BaseDeletedModel;
+import jakarta.persistence.*;
+import jakarta.validation.constraints.Size;
+import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+@Table(name = "tnc_workflow")
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+@SQLRestriction("is_deleted = false")
+public class TncWorkflow extends BaseDeletedModel {
 
+    @Id
+    private Long id;
 
+    @Column(name = "tnc_type_id", nullable = false)
+    private Long tncTypeId;
+
+    @Column(name = "name", nullable = false)
+    @Size(max = 255)
+    private String name;
+
+    @Builder.Default
+    @Lob
+    @Column(name = "description", nullable = false, columnDefinition = "text default ''")
+    private String description = "";
+
+    @Builder.Default
+    @Column(name = "sequence", nullable = false, columnDefinition = "int default 0")
+    private Integer sequence = 0;
 }

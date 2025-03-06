@@ -18,16 +18,33 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.controller;
 
-public final class ApiConstants {
+import com.mars.tnc.constants.ApiConstants;
+import com.mars.tnc.service.SeedService;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.web.bind.annotation.*;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+import java.util.Map;
+
+@Slf4j
+@RestController
+@RequiredArgsConstructor
+@RequestMapping(ApiConstants.SEED_BASE_URL)
+public class SeedController {
+
+    private final SeedService seedService;
+
+    @GetMapping("/{imei}")
+    public Map<String, Object> verify(@PathVariable("imei") String imei){
+        return seedService.verify(imei);
+    }
+
+    @PostMapping(ApiConstants.MODE_ENDPOINT)
+    public Map<String, Object> updateMode(@RequestParam String imei, @RequestParam String mode){
+        return seedService.updateMode(imei, mode);
+    }
 
 
 }

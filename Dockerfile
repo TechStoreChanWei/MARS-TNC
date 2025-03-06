@@ -20,12 +20,13 @@
 #
 # *****************************************************************************************
 
-# Use an OpenJDK 17 base image
-FROM openjdk:17
+# Use an OpenJDK 17 base image for building
+FROM openjdk:17 AS builder
 
 # Get build arguments
 ARG TZ
 ARG VERSION
+ARG SERVICE_NAME=mars-tnc
 
 # Set timezone
 ENV TZ=${TZ}
@@ -36,12 +37,36 @@ WORKDIR /app
 # Copy JAR file
 COPY build/libs/MARS-TNC-${VERSION}.jar /app/app.jar
 
+# Generate the class list for AppCDS
+RUN java -Xshare:off -XX:DumpLoadedClassList=classes.lst -jar app.jar --spring.main.lazy-initialization=true || true
+
+# Create the AppCDS archive with a unique name
+RUN java -Xshare:dump -XX:SharedClassListFile=classes.lst -XX:SharedArchiveFile=${SERVICE_NAME}-cds.jsa -jar app.jar || true
+
+# Use a clean JDK runtime for the final image
+FROM openjdk:17
+
+# Get build arguments
+ARG TZ
+ARG VERSION
+ARG SERVICE_NAME=mars-tnc
+
+# Set timezone
+ENV TZ=${TZ}
+
+# Set the working directory
+WORKDIR /app
+
+# Copy JAR file and AppCDS archive from the builder stage
+COPY --from=builder /app/app.jar /app/app.jar
+COPY --from=builder /app/${SERVICE_NAME}-cds.jsa /app/${SERVICE_NAME}-cds.jsa
+
 # Expose the service port
-EXPOSE 8181
+EXPOSE 9810
 
-# Set minimum and maximum heap memory (e.g., min 512m, max 2g)
-ENV JAVA_OPTS="-Xms256m -Xmx512m"
+# Set minimum and maximum heap memory and enable AppCDS
+ENV JAVA_OPTS="-Xms256m -Xmx512m -Xshare:on -XX:SharedArchiveFile=/app/${SERVICE_NAME}-cds.jsa"
 
-# Start JAVA App with custom memory settings
-ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar app.jar"]
+# Start the application with AppCDS optimization
+ENTRYPOINT ["sh", "-c", "java $JAVA_OPTS -jar /app/app.jar"]
 

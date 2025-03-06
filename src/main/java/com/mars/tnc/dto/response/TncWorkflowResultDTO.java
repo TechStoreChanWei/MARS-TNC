@@ -18,16 +18,39 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.dto.response;
 
-public final class ApiConstants {
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+import java.time.LocalDateTime;
 
+@Data
+@AllArgsConstructor
+@NoArgsConstructor
+@Builder(toBuilder = true)
+public class TncWorkflowResultDTO {
 
+    @JsonProperty("tnc_request_id")
+    private Long tncRequestId;
+
+    @JsonProperty("tnc_workflow_id")
+    private Long tncWorkflowId;
+
+    @JsonProperty("tnc_workflow_step_id")
+    private Long tncWorkflowStepId;
+
+    @JsonProperty("device_id")
+    private Long deviceId;
+
+    @JsonProperty("status")
+    private Integer status;
+
+    @JsonProperty("created_at")
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd HH:mm:ss")
+    private LocalDateTime createdAt;
 }

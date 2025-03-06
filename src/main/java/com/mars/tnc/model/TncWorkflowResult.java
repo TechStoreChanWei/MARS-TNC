@@ -18,16 +18,41 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.model;
 
-public final class ApiConstants {
+import com.mars.tnc.model.base.BaseDeletedModel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import lombok.*;
+import org.hibernate.annotations.SQLRestriction;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+@Table(name = "tnc_workflow_result")
+@Entity
+@Data
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder(toBuilder = true)
+@EqualsAndHashCode(callSuper = true)
+@SQLRestriction("is_deleted = false")
+public class TncWorkflowResult extends BaseDeletedModel {
 
+    @Id
+    private Long id;
 
+    @Column(name = "tnc_request_id", nullable = false)
+    private Long tncRequestId;
+
+    @Column(name = "tnc_workflow_id", nullable = false)
+    private Long tncWorkflowId;
+
+    @Column(name = "tnc_workflow_step_id", nullable = false)
+    private Long tncWorkflowStepId;
+
+    @Column(name = "device_id", nullable = false)
+    private Long deviceId;
+
+    @Column(name = "status", nullable = false)
+    private Integer status;
 }

@@ -18,16 +18,20 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.repository;
 
-public final class ApiConstants {
+import com.mars.tnc.model.EventTemplateMap;
+import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
+import org.springframework.stereotype.Repository;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+@Repository
+public interface EventTemplateMapRepository extends JpaRepository<EventTemplateMap, Long> {
 
-
+    @Query(value = "SELECT COUNT(etm) > 0 FROM EventTemplateMap etm " +
+            "WHERE etm.referenceTypeId = :referenceTypeId AND " +
+            "etm.referenceId = :referenceId")
+    Boolean existsByReferenceTypeIdAndReferenceId(@Param("referenceTypeId") Long referenceTypeId,
+                                                  @Param("referenceId") Long referenceId);
 }

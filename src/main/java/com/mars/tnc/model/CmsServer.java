@@ -18,16 +18,36 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.model;
 
-public final class ApiConstants {
+import com.mars.tnc.model.base.BaseModel;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.Size;
+import lombok.Getter;
+import org.hibernate.annotations.Immutable;
+import org.hibernate.annotations.SQLRestriction;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+@Table(name = "adm_cms_server")
+@Entity
+@Getter
+@Immutable
+@SQLRestriction("is_deleted = false")
+public class CmsServer extends BaseModel {
 
+    @Id
+    private Long id;
 
+    @Column(name = "ip_address", nullable = false, insertable = false, updatable = false)
+    @Size(max = 255)
+    private String ipAddress;
+
+    @Column(name = "port", nullable = false, insertable = false, updatable = false)
+    private Integer port;
+
+    @Column(name = "domain_name", nullable = false, insertable = false, updatable = false)
+    @Size(max = 255)
+    private String domainName;
 }

@@ -18,16 +18,15 @@
  * and approved by Tech-Store in writing.
  */
 
-package com.mars.tnc.constants;
+package com.mars.tnc.service;
 
-public final class ApiConstants {
+import com.mars.tnc.dto.request.TncWorkflowResultGenerateDTO;
+import com.mars.tnc.dto.response.TncWorkflowResultDTO;
 
-    public static final String SEED_BASE_URL = "/seed";
-    public static final String TNC_REQUEST_BASE_URL = "/tnc-requests";
-    public static final String TNC_WORKFLOW_RESULT_BASE_URL = "/tnc-workflow-results";
-    public static final String FILE_BASE_URL = "/files";
-    public static final String MODE_ENDPOINT = "/mode";
-    public static final String GENERATE_ENDPOINT = "/generate";
+import java.util.List;
 
 
+public interface TncWorkflowResultService {
+
+    List<TncWorkflowResultDTO> generate(TncWorkflowResultGenerateDTO tncWorkflowResultGenerateDTO);
 }
